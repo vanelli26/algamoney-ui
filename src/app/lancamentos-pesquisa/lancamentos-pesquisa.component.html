@@ -39,11 +39,11 @@
             <tr>
                 <td>{{lanc.pessoa}}</td>
                 <td>{{lanc.descricao}}</td>
-                <td ngClass="col-data">{{lanc.dataVencimento}}</td>
-                <td ngClass="col-valor">{{lanc.dataPagamento}}</td>
+                <td ngClass="col-data">{{lanc.dataVencimento | date:"dd/MM/yyyy"}}</td>
+                <td ngClass="col-valor">{{lanc.dataPagamento | date:"dd/MM/yyyy"}}</td>
                 <td ngClass="col-valor">
                     <span [style.color]="lanc.tipo === 'DESPESA' ? 'red' : 'blue'">
-                      {{lanc.valor}}
+                      {{lanc.valor | number:'1.2-2'}}
                     </span>
                 </td>
                 <td ngClass="col-acoes">
