@@ -1,16 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
-import {TableModule} from 'primeng/table';
-import {TooltipModule} from 'primeng/tooltip';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import { CalendarModule } from 'primeng/calendar';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { DropdownModule } from 'primeng/dropdown';
+
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
+import { AppComponent } from './app.component';
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PessoasPesquisaComponent } from './pessoas-pesquisa/pessoas-pesquisa.component';
 import { ExemploDirective } from './exemplo.directive';
+import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
 
 @NgModule({
   declarations: [
@@ -18,15 +27,22 @@ import { ExemploDirective } from './exemplo.directive';
     LancamentosPesquisaComponent,
     NavbarComponent,
     PessoasPesquisaComponent,
-    ExemploDirective
+    ExemploDirective,
+    LancamentoCadastroComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     InputTextModule,
+    InputTextareaModule,
     ButtonModule,
     TableModule,
-    TooltipModule
+    TooltipModule,
+    CalendarModule,
+    SelectButtonModule,
+    DropdownModule,
+    CurrencyMaskModule
   ],
   providers: [],
   bootstrap: [AppComponent]
