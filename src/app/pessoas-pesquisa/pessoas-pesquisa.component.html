@@ -16,29 +16,7 @@
 
   <div class="ui-g">
     <div class="ui-g-12">
-        <p-table [value]="pessoas" [paginator]="true" [rows]="2" [responsive]="true">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Nome</th>
-              <th>Cidade</th>
-              <th>Estado</th>
-              <th>Ativo</th>
-              <th>Ações</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-pes>
-              <tr>
-                  <td>{{pes.nome}}</td>
-                  <td ngClass="col-data">{{pes.cidade}}</td>
-                  <td ngClass="col-data">{{pes.estado}}</td>
-                  <td ngClass="col-data" [pTooltip]="pes.ativo ? 'Desativar' : 'Ativar'" tooltipPosition="top">{{ pes.ativo ? 'Ativo' : 'Inativo' }}</td>
-                  <td ngClass="col-acoes">
-                    <button type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></button>
-                    <button type="button" pButton icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top"></button>
-                  </td>
-              </tr>
-          </ng-template>
-        </p-table>
+      <app-pessoas-grid [dados]="pessoas"></app-pessoas-grid>
     </div>
     <div class="ui-g-12">
       <a pButton label="Nova Pessoa"></a>
