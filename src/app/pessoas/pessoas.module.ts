@@ -12,6 +12,8 @@ import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 
+import { SharedModule } from './../shared/shared.module';
+
 @NgModule({
   declarations: [
     PessoasGridComponent,
@@ -21,11 +23,14 @@ import { ButtonModule } from 'primeng/button';
   imports: [
     CommonModule,
     FormsModule,
+
     InputTextModule,
     TableModule,
     TooltipModule,
     InputMaskModule,
-    ButtonModule
+    ButtonModule,
+
+    SharedModule
   ],
   exports: [
     PessoasPesquisaComponent,

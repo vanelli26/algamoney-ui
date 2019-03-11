@@ -17,6 +17,8 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 
+import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
   declarations: [
     LancamentosPesquisaComponent,
@@ -26,6 +28,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
   imports: [
     CommonModule,
     FormsModule,
+
     InputTextModule,
     InputTextareaModule,
     ButtonModule,
@@ -34,7 +37,9 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     CalendarModule,
     SelectButtonModule,
     DropdownModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+
+    SharedModule
   ],
   exports: [
     LancamentosPesquisaComponent,
