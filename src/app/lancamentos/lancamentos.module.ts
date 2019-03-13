@@ -18,6 +18,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { SharedModule } from '../shared/shared.module';
+import { LancamentoService } from './lancamento.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,9 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
+    MessagesModule,
+    MessageModule,
 
     InputTextModule,
     InputTextareaModule,
@@ -44,6 +51,9 @@ import { SharedModule } from '../shared/shared.module';
   exports: [
     LancamentosPesquisaComponent,
     LancamentoCadastroComponent
+  ],
+  providers: [
+    LancamentoService
   ]
 })
 export class LancamentosModule { }

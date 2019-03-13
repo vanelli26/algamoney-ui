@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LancamentoService, LancamentoFiltro } from '../lancamento.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -6,26 +7,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lancamentos-pesquisa.component.css']
 })
 export class LancamentosPesquisaComponent implements OnInit {
-  lancamentos = [
-    { tipo: 'DESPESA', descricao: 'Compra de pão', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: null, valor: 4.55, pessoa: 'Padaria do José' },
-    { tipo: 'RECEITA', descricao: 'Venda de software', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: new Date(1988, 3, 15), valor: 80000, pessoa: 'Atacado Brasil' },
-    { tipo: 'DESPESA', descricao: 'Impostos', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: null, valor: 14312, pessoa: 'Ministério da Fazenda' },
-    { tipo: 'DESPESA', descricao: 'Mensalidade de escola', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: new Date(1988, 3, 15), valor: 800, pessoa: 'Escola Abelha Rainha' },
-    { tipo: 'RECEITA', descricao: 'Venda de carro', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: null, valor: 55000, pessoa: 'Sebastião Souza' },
-    { tipo: 'DESPESA', descricao: 'Aluguel', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: new Date(1988, 3, 15), valor: 1750, pessoa: 'Casa Nova Imóveis' },
-    { tipo: 'DESPESA', descricao: 'Mensalidade musculação', dataVencimento: new Date(1988, 3, 15),
-      dataPagamento: null, valor: 180, pessoa: 'Academia Top' }
-  ];
 
-  constructor() { }
+  descricao: string;
+  dataVencimentoInicio: Date;
+  dataVencimentoFim: Date;
+  lancamentos = [ ];
+
+  constructor(private lancamentoService: LancamentoService) { }
 
   ngOnInit() {
+    this.pesquisar();
   }
 
+  pesquisar() {
+    const filtro: LancamentoFiltro = {
+      descricao: this.descricao,
+      dataVencimentoInicio: this.dataVencimentoInicio,
+      dataVencimentoFim: this.dataVencimentoFim
+    };
+
+    this.lancamentoService.pesquisar(filtro)
+      .then((data) => {
+        this.lancamentos = data.content;
+      }
+    );
+  }
 }
