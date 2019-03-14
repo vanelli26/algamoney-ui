@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as moment from 'moment';
 
-export interface LancamentoFiltro {
+export class LancamentoFiltro {
   descricao: string;
   dataVencimentoInicio: Date;
   dataVencimentoFim: Date;
+  pagina = 0;
+  itensPorPagina = 5;
 }
 
 @Injectable({
@@ -20,6 +22,10 @@ export class LancamentoService {
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
 
     let httpParams = new HttpParams();
+
+    httpParams = httpParams.append('page', filtro.pagina.toString());
+    httpParams = httpParams.append('size', filtro.itensPorPagina.toString());
+
     if (filtro.descricao) {
       httpParams = httpParams.append('descricao', filtro.descricao);
     }

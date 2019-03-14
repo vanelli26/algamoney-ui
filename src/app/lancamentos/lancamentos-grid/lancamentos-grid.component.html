@@ -1,4 +1,4 @@
-<p-table [value]="dados" [paginator]="true" [rows]="5" [responsive]="true">
+<p-table [value]="dados" [paginator]="true" [rows]="linhas" [responsive]="true" [lazy]="true" [totalRecords]="total">
   <ng-template pTemplate="header">
     <tr>
         <th>Pessoa</th>

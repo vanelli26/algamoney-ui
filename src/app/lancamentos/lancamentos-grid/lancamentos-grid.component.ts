@@ -7,5 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class LancamentosGridComponent {
   @Input() dados = [];
-
+  @Input() linhas = 0;
+  @Input() total = 0;
 }
