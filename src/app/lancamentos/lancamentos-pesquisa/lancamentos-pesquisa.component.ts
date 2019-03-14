@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LazyLoadEvent, MessageService } from 'primeng/components/common/api';
+import { LazyLoadEvent, MessageService, ConfirmationService } from 'primeng/components/common/api';
 import { LancamentoService, LancamentoFiltro } from '../lancamento.service';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -16,7 +17,9 @@ export class LancamentosPesquisaComponent implements OnInit {
 
   constructor(
     private lancamentoService: LancamentoService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
+    private errorHandler: ErrorHandlerService
   ) { }
 
   ngOnInit() {
@@ -31,7 +34,8 @@ export class LancamentosPesquisaComponent implements OnInit {
         this.totalRegistros = data.totalElements;
         this.lancamentos = data.content;
         this.loading = false;
-      });
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   aoMudarPagina(event: LazyLoadEvent) {
@@ -40,10 +44,19 @@ export class LancamentosPesquisaComponent implements OnInit {
   }
 
   excluir(lancamento: any) {
-    this.lancamentoService.excluir(lancamento.codigo)
-      .then(() => {
-        this.pesquisar(this.filtro.pagina);
-        this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento excluido com sucesso!'});
-      });
+
+    this.confirmationService.confirm({
+      message: 'Confirma a exclusão do registro?',
+      header: 'Confirmar exclusão',
+      icon: 'pi pi-trash',
+      accept: () => {
+        this.lancamentoService.excluir(lancamento.codigo)
+        .then(() => {
+          this.pesquisar(this.filtro.pagina);
+          this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento excluido com sucesso!'});
+        })
+        .catch(erro => this.errorHandler.handle(erro));
+      }
+    });
   }
 }

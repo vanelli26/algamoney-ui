@@ -22,8 +22,6 @@ import { LancamentoService } from './lancamento.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/components/common/api';
 
 @NgModule({
   declarations: [
@@ -47,7 +45,6 @@ import { MessageService } from 'primeng/components/common/api';
     SelectButtonModule,
     DropdownModule,
     CurrencyMaskModule,
-    ToastModule,
 
     SharedModule
   ],
@@ -56,8 +53,7 @@ import { MessageService } from 'primeng/components/common/api';
     LancamentoCadastroComponent
   ],
   providers: [
-    LancamentoService,
-    MessageService
+    LancamentoService
   ]
 })
 export class LancamentosModule { }
