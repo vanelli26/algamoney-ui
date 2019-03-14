@@ -18,7 +18,7 @@
   <div class="ui-g">
     <div class="ui-g-12">
       <!--<app-pessoas-grid [dados]="pessoas"></app-pessoas-grid>-->
-      <p-table [value]="pessoas" [loading]="loading" [paginator]="true" [rows]="filtro.itensPorPagina" [responsive]="true" [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)">
+      <p-table #tabela [value]="pessoas" [loading]="loading" [paginator]="true" [rows]="filtro.itensPorPagina" [responsive]="true" [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)">
         <ng-template pTemplate="header">
           <tr>
             <th>Nome</th>
@@ -33,10 +33,10 @@
                 <td>{{pes.nome}}</td>
                 <td ngClass="col-data">{{pes.endereco.cidade}}</td>
                 <td ngClass="col-data">{{pes.endereco.estado}}</td>
-                <td ngClass="col-data" [pTooltip]="pes.ativo ? 'Desativar' : 'Ativar'" tooltipPosition="top">{{ pes.ativo ? 'Ativo' : 'Inativo' }}</td>
+                <td ngClass="col-data" [pTooltip]="pes.ativo ? 'Desativar' : 'Ativar'" tooltipPosition="top"><a href="javascript:;" (click)="alternarStatus(pes)">{{ pes.ativo ? 'Ativo' : 'Inativo' }}</a></td>
                 <td ngClass="col-acoes">
                   <button type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></button>
-                  <button type="button" pButton icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top"></button>
+                  <button type="button" pButton icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top" (click)="excluir(pes)"></button>
                 </td>
             </tr>
         </ng-template>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/components/common/api';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,13 @@ export class ErrorHandlerService {
 
     if (typeof errorResponse === 'string') {
       msg = errorResponse;
+    } else if (errorResponse instanceof HttpErrorResponse && errorResponse.status >= 400 && errorResponse.status <= 499) {
+      msg = 'Ocorreu um erro ao processar a sua solicitação';
+      try {
+        msg += ' - ' + errorResponse.error[0].mensagemUsuario;
+      } catch (e) { }
+
+      console.error(msg, errorResponse.error[0]);
     } else {
       msg = 'Erro ao processar serviço remoto. Tente novamente mais tarde.';
       console.error('Ocorreu um erro', errorResponse);

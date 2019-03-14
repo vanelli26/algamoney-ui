@@ -1,4 +1,12 @@
+import { LancamentoService } from './../lancamento.service';
+import { FormControl } from '@angular/forms';
+import { Lancamento } from './../lancamento';
+import { map } from 'rxjs/operators';
+import { PessoaService } from './../../pessoas/pessoa.service';
 import { Component, OnInit } from '@angular/core';
+import { CategoriaService } from 'src/app/categorias/categoria.service';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -7,38 +15,55 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LancamentoCadastroComponent implements OnInit {
 
-  pt: any;
-
   tipos = [
     {label: 'Receita', value: 'RECEITA'},
     {label: 'Despesa', value: 'DESPESA'}
   ];
 
-  categorias = [
-    { label: 'Alimentação', value: 1 },
-    { label: 'Transporte', value: 2 },
-  ];
+  categorias = [];
+  pessoas = [];
+  lancamento = new Lancamento();
 
-  pessoas = [
-    { label: 'João da Silva', value: 4 },
-    { label: 'Sebastião Souza', value: 9 },
-    { label: 'Maria Abadia', value: 3 },
-  ];
-
-  constructor() { }
+  constructor(
+    private categoriasService: CategoriaService,
+    private pessoasService: PessoaService,
+    private lancamentoService: LancamentoService,
+    private messageService: MessageService,
+    private errorHandler: ErrorHandlerService
+  ) { }
 
   ngOnInit() {
-    this.pt = {
-      firstDayOfWeek: 0,
-      dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
-      dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
-      dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
-      monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-      monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
-      today: 'Hoje',
-      clear: 'Limpar',
-      dateFormat: 'dd/mm/yy'
-    };
+    this.carregarCategorias();
+    this.carregaPessoas();
   }
 
+  carregarCategorias() {
+    return this.categoriasService.listarTodas()
+      .then(categorias => {
+        this.categorias = categorias.map(c => {
+          return {label: c.nome, value: c.codigo};
+        });
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  carregaPessoas() {
+    return this.pessoasService.listarTodas()
+    .then(pessoas => {
+      this.pessoas = pessoas.content.map(c => {
+        return {label: c.nome, value: c.codigo};
+      });
+    })
+    .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  salvar(form: FormControl) {
+    this.lancamentoService.adicionar(this.lancamento)
+      .then(() => {
+        this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento salvo com sucesso!'});
+        form.reset();
+        this.lancamento = new Lancamento();
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
 }

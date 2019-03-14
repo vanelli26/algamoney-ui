@@ -15,7 +15,7 @@ export class PessoaService {
 
   constructor(private http: HttpClient) { }
 
-  pesquisar(filtro: PessoaFiltro): Promise<any>{
+  pesquisar(filtro: PessoaFiltro): Promise<any> {
     let httpParams = new HttpParams();
     httpParams = httpParams.append('page', filtro.pagina.toString());
     httpParams = httpParams.append('size', filtro.itensPorPagina.toString());
@@ -34,7 +34,33 @@ export class PessoaService {
     return this.http.get(this.pessoasURL, httpOptions).toPromise();
   }
 
-  listarTodas() {
+  excluir(codigo: number): Promise<void> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg=='
+      })
+    };
+
+    return this.http.delete(this.pessoasURL + '/' + codigo, httpOptions)
+      .toPromise()
+      .then(() => null);
+  }
+
+  alternarStatus(codigo: number, ativo: boolean): Promise<void> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg=='
+      })
+    };
+
+    return this.http.put(this.pessoasURL + '/' + codigo + '/ativo', ativo, httpOptions)
+    .toPromise()
+    .then(() => null);
+  }
+
+  listarTodas(): Promise<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
