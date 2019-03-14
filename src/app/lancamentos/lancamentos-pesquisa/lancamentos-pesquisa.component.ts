@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LazyLoadEvent } from 'primeng/components/common/api';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { LazyLoadEvent, MessageService } from 'primeng/components/common/api';
 import { LancamentoService, LancamentoFiltro } from '../lancamento.service';
 
 @Component({
@@ -12,7 +12,12 @@ export class LancamentosPesquisaComponent implements OnInit {
   filtro = new LancamentoFiltro();
   lancamentos = [ ];
   loading: boolean;
-  constructor(private lancamentoService: LancamentoService) { }
+  @ViewChild('tabela') grid;
+
+  constructor(
+    private lancamentoService: LancamentoService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit() {
     this.loading = true;
@@ -32,5 +37,13 @@ export class LancamentosPesquisaComponent implements OnInit {
   aoMudarPagina(event: LazyLoadEvent) {
     const pagina = event.first / event.rows;
     this.pesquisar(pagina);
+  }
+
+  excluir(lancamento: any) {
+    this.lancamentoService.excluir(lancamento.codigo)
+      .then(() => {
+        this.pesquisar(this.filtro.pagina);
+        this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento excluido com sucesso!'});
+      });
   }
 }

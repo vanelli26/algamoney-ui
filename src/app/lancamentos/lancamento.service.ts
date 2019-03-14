@@ -46,4 +46,17 @@ export class LancamentoService {
 
     return this.http.get(this.lancamentosURL + '?resumo', httpOptions).toPromise();
   }
+
+  excluir(codigo: number): Promise<void> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg=='
+      })
+    };
+
+    return this.http.delete(this.lancamentosURL + '/' + codigo, httpOptions)
+      .toPromise()
+      .then(() => null);
+  }
 }
