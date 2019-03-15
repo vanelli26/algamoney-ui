@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
@@ -35,6 +36,7 @@ import { MessagesModule } from 'primeng/messages';
     HttpClientModule,
     MessagesModule,
     MessageModule,
+    RouterModule,
 
     InputTextModule,
     InputTextareaModule,

@@ -4,6 +4,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ErrorHandlerService } from './error-handler.service';
 import localePt from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/api';
@@ -18,6 +19,7 @@ registerLocaleData(localePt, 'pt-BR');
   ],
   imports: [
     CommonModule,
+    RouterModule,
     ConfirmDialogModule,
     ToastModule
   ],
