@@ -50,7 +50,7 @@
                     </span>
                 </td>
                 <td ngClass="col-acoes">
-                  <button type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></button>
+                  <a [routerLink]="['/lancamentos', lanc.codigo]" type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></a>
                   <button type="button" pButton icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top" (click)="excluir(lanc)"></button>
                 </td>
             </tr>

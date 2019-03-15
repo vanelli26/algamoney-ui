@@ -18,6 +18,7 @@ import { LancamentosPesquisaComponent } from './lancamentos/lancamentos-pesquisa
 const routes: Routes = [
   { path: 'lancamentos', component: LancamentosPesquisaComponent },
   { path: 'lancamentos/cadastro', component: LancamentoCadastroComponent },
+  { path: 'lancamentos/:codigo', component: LancamentoCadastroComponent },
   { path: 'pessoas', component: PessoasPesquisaComponent },
   { path: 'pessoas/cadastro', component: PessoaCadastroComponent }
 ];
