@@ -15,7 +15,6 @@ export class LancamentoFiltro {
   providedIn: 'root'
 })
 export class LancamentoService {
-
   lancamentosURL = 'http://localhost:8080/lancamentos';
 
   constructor(private http: HttpClient) { }
@@ -83,7 +82,7 @@ export class LancamentoService {
     return this.http.put(this.lancamentosURL + '/' + lancamento.codigo, JSON.stringify(lancamento), httpOptions)
       .toPromise()
       .then(response => {
-        const lancamentoAlterado = JSON.parse(response.toString()) as Lancamento;
+        const lancamentoAlterado = response as Lancamento;
         this.converterStringsParaDatas(lancamentoAlterado);
         return lancamentoAlterado;
       });
@@ -100,7 +99,7 @@ export class LancamentoService {
     return this.http.get(this.lancamentosURL + '/' + codigo, httpOptions)
       .toPromise()
       .then(response => {
-        const lancamentoAlterado = JSON.parse(response.toString()) as Lancamento;
+        const lancamentoAlterado = response as Lancamento;
         this.converterStringsParaDatas(lancamentoAlterado);
         return lancamentoAlterado;
       });

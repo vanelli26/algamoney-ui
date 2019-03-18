@@ -82,4 +82,26 @@ export class PessoaService {
 
     return this.http.post(this.pessoasURL, JSON.stringify(lancamento), httpOptions).toPromise();
   }
+
+  pesquisaCodigo(codigo: number): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg=='
+      })
+    };
+
+    return this.http.get(this.pessoasURL + '/' + codigo, httpOptions).toPromise();
+  }
+
+  atualizar(lancamento: Pessoa): Promise<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: 'Basic YWRtaW5AYWxnYW1vbmV5LmNvbTphZG1pbg=='
+      })
+    };
+
+    return this.http.put(this.pessoasURL + '/' + lancamento.codigo, JSON.stringify(lancamento), httpOptions).toPromise();
+  }
 }

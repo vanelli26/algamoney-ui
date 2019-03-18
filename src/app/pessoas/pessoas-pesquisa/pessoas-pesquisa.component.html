@@ -35,7 +35,7 @@
                 <td ngClass="col-data">{{pes.endereco.estado}}</td>
                 <td ngClass="col-data" [pTooltip]="pes.ativo ? 'Desativar' : 'Ativar'" tooltipPosition="top"><a href="javascript:;" (click)="alternarStatus(pes)">{{ pes.ativo ? 'Ativo' : 'Inativo' }}</a></td>
                 <td ngClass="col-acoes">
-                  <button type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></button>
+                  <a [routerLink]="['/pessoas', pes.codigo]" type="button" style="margin-right:5px;" pButton icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></a>
                   <button type="button" pButton icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top" (click)="excluir(pes)"></button>
                 </td>
             </tr>

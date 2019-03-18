@@ -46,7 +46,7 @@
       </div>
       <div class="ui-g-12">
         <button class="botao" pButton type="submit" label="Salvar" [disabled]="f.invalid"></button>
-        <button class="ui-button-info botao" pButton type="button" label="Novo"></button>
+        <button class="ui-button-info botao" pButton type="button" label="Novo" (click)="novo(f)"></button>
         <a class="botao" routerLink="/pessoas">Voltar para a pesquisa</a>
       </div>
     </div>
