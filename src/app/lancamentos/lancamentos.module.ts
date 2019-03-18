@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { LancamentosPesquisaComponent } from './lancamentos-pesquisa/lancamentos-pesquisa.component';
 import { LancamentoCadastroComponent } from './lancamento-cadastro/lancamento-cadastro.component';
-import { LancamentosGridComponent } from './lancamentos-grid/lancamentos-grid.component';
 
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -23,12 +22,12 @@ import { LancamentoService } from './lancamento.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
+import { LancamentosRountingModule } from './lancamentos-routing.module';
 
 @NgModule({
   declarations: [
     LancamentosPesquisaComponent,
-    LancamentoCadastroComponent,
-    LancamentosGridComponent
+    LancamentoCadastroComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +35,6 @@ import { MessagesModule } from 'primeng/messages';
     HttpClientModule,
     MessagesModule,
     MessageModule,
-    RouterModule,
 
     InputTextModule,
     InputTextareaModule,
@@ -48,12 +46,10 @@ import { MessagesModule } from 'primeng/messages';
     DropdownModule,
     CurrencyMaskModule,
 
-    SharedModule
+    SharedModule,
+    LancamentosRountingModule
   ],
-  exports: [
-    LancamentosPesquisaComponent,
-    LancamentoCadastroComponent
-  ],
+  exports: [],
   providers: [
     LancamentoService
   ]

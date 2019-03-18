@@ -8,6 +8,7 @@ import { CategoriaService } from 'src/app/categorias/categoria.service';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -31,13 +32,16 @@ export class LancamentoCadastroComponent implements OnInit {
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private title: Title
   ) { }
 
   ngOnInit() {
+    this.title.setTitle('Cadastro Lançamento');
     const codigoLancamento = this.route.snapshot.params.codigo;
     if (codigoLancamento) {
       this.titulo = 'Editando lançamento';
+      this.title.setTitle('Editando Lançamento');
       this.carregarLancamento(codigoLancamento);
     }
     this.carregarCategorias();

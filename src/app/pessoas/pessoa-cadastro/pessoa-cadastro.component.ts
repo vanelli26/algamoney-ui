@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { Pessoa } from '../pessoa';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pessoa-cadastro',
@@ -21,13 +22,16 @@ export class PessoaCadastroComponent implements OnInit {
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private title: Title
   ) { }
 
   ngOnInit() {
+    this.title.setTitle('Cadastro Pessoa');
     const codigoPessoa = this.route.snapshot.params.codigo;
     if (codigoPessoa) {
       this.titulo = 'Editando Pessoa';
+      this.title.setTitle('Editando Pessoa');
       this.carregarCadastro(codigoPessoa);
     }
   }
