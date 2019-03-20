@@ -1,40 +1,51 @@
 import { Title } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './navbar/navbar.component';
+
+import { ConfirmationService } from 'primeng/components/common/api';
+import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
+import { ToastyModule } from 'ng2-toasty';
+import { JwtHelper } from 'angular2-jwt';
+
+import { AuthService } from './../seguranca/auth.service';
 import { ErrorHandlerService } from './error-handler.service';
-import localePt from '@angular/common/locales/pt';
-import { registerLocaleData } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
-import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/components/common/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
-import { NotFoundComponent } from './not-found.component';
-
-registerLocaleData(localePt, 'pt-BR');
+import { PessoaService } from './../pessoas/pessoa.service';
+import { LancamentoService } from './../lancamentos/lancamento.service';
+import { CategoriaService } from './../categorias/categoria.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
+import { NaoAutorizadoComponent } from './nao-autorizado.component';
 
 @NgModule({
-  declarations: [
-    NavbarComponent,
-    NotFoundComponent
-  ],
   imports: [
     CommonModule,
+    HttpModule,
     RouterModule,
+
+    ToastyModule.forRoot(),
     ConfirmDialogModule,
-    ToastModule
+  ],
+  declarations: [
+    NavbarComponent,
+    PaginaNaoEncontradaComponent,
+    NaoAutorizadoComponent
   ],
   exports: [
     NavbarComponent,
-    ConfirmDialogModule,
-    ToastModule
+    ToastyModule,
+    ConfirmDialogModule
   ],
   providers: [
+    LancamentoService,
+    PessoaService,
+    CategoriaService,
     ErrorHandlerService,
+    AuthService,
+
     ConfirmationService,
-    MessageService,
+    JwtHelper,
     Title,
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ]

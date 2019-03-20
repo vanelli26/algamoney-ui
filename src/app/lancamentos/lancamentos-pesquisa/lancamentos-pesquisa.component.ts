@@ -1,8 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { LazyLoadEvent, MessageService, ConfirmationService } from 'primeng/components/common/api';
-import { LancamentoService, LancamentoFiltro } from '../lancamento.service';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { Title } from '@angular/platform-browser';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { LazyLoadEvent, ConfirmationService } from 'primeng/components/common/api';
+import { ToastyService } from 'ng2-toasty';
+
+import { ErrorHandlerService } from './../../core/error-handler.service';
+import { LancamentoService, LancamentoFiltro } from './../lancamento.service';
+import { AuthService } from './../../seguranca/auth.service';
 
 @Component({
   selector: 'app-lancamentos-pesquisa',
@@ -10,33 +14,32 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./lancamentos-pesquisa.component.css']
 })
 export class LancamentosPesquisaComponent implements OnInit {
+
   totalRegistros = 0;
   filtro = new LancamentoFiltro();
-  lancamentos = [ ];
-  loading: boolean;
+  lancamentos = [];
   @ViewChild('tabela') grid;
 
   constructor(
+    private auth: AuthService,
     private lancamentoService: LancamentoService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
+    private toasty: ToastyService,
+    private confirmation: ConfirmationService,
     private title: Title
   ) { }
 
   ngOnInit() {
-    this.loading = true;
-    this.title.setTitle('Pesquisa Lançamentos');
+    this.title.setTitle('Pesquisa de lançamentos');
   }
 
   pesquisar(pagina = 0) {
     this.filtro.pagina = pagina;
-    this.loading = true;
+
     this.lancamentoService.pesquisar(this.filtro)
-      .then((data) => {
-        this.totalRegistros = data.totalElements;
-        this.lancamentos = data.content;
-        this.loading = false;
+      .then(resultado => {
+        this.totalRegistros = resultado.total;
+        this.lancamentos = resultado.lancamentos;
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -46,20 +49,27 @@ export class LancamentosPesquisaComponent implements OnInit {
     this.pesquisar(pagina);
   }
 
-  excluir(lancamento: any) {
-
-    this.confirmationService.confirm({
-      message: 'Confirma a exclusão do registro?',
-      header: 'Confirmar exclusão',
-      icon: 'pi pi-trash',
+  confirmarExclusao(lancamento: any) {
+    this.confirmation.confirm({
+      message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.lancamentoService.excluir(lancamento.codigo)
-        .then(() => {
-          this.pesquisar(this.filtro.pagina);
-          this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento excluido com sucesso!'});
-        })
-        .catch(erro => this.errorHandler.handle(erro));
+        this.excluir(lancamento);
       }
     });
   }
+
+  excluir(lancamento: any) {
+    this.lancamentoService.excluir(lancamento.codigo)
+      .then(() => {
+        if (this.grid.first === 0) {
+          this.pesquisar();
+        } else {
+          this.grid.first = 0;
+        }
+
+        this.toasty.success('Lançamento excluído com sucesso!');
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
 }

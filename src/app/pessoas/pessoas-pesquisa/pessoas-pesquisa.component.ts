@@ -1,9 +1,11 @@
-import { PessoaService } from './../pessoa.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { PessoaFiltro } from '../pessoa.service';
-import { LazyLoadEvent, MessageService, ConfirmationService } from 'primeng/components/common/api';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
 import { Title } from '@angular/platform-browser';
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { LazyLoadEvent, ConfirmationService } from 'primeng/components/common/api';
+import { ToastyService } from 'ng2-toasty';
+
+import { ErrorHandlerService } from './../../core/error-handler.service';
+import { PessoaFiltro, PessoaService } from './../pessoa.service';
 
 @Component({
   selector: 'app-pessoas-pesquisa',
@@ -14,32 +16,28 @@ export class PessoasPesquisaComponent implements OnInit {
 
   totalRegistros = 0;
   filtro = new PessoaFiltro();
-  pessoas = [ ];
-  loading: boolean;
+  pessoas = [];
   @ViewChild('tabela') grid;
 
   constructor(
     private pessoaService: PessoaService,
     private errorHandler: ErrorHandlerService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private confirmation: ConfirmationService,
+    private toasty: ToastyService,
     private title: Title
   ) { }
 
   ngOnInit() {
-    this.title.setTitle('Pesquisa Pessoa');
-    this.loading = true;
+    this.title.setTitle('Pesquisa de pessoas');
   }
 
   pesquisar(pagina = 0) {
-    this.grid.first = 0;
     this.filtro.pagina = pagina;
-    this.loading = true;
+
     this.pessoaService.pesquisar(this.filtro)
-      .then((data) => {
-        this.totalRegistros = data.totalElements;
-        this.pessoas = data.content;
-        this.loading = false;
+      .then(resultado => {
+        this.totalRegistros = resultado.total;
+        this.pessoas = resultado.pessoas;
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
@@ -49,32 +47,40 @@ export class PessoasPesquisaComponent implements OnInit {
     this.pesquisar(pagina);
   }
 
-  excluir(pessoa: any) {
-    this.confirmationService.confirm({
-      message: 'Confirma a exclusão do registro?',
-      header: 'Confirmar exclusão',
-      icon: 'pi pi-trash',
+  confirmarExclusao(pessoa: any) {
+    this.confirmation.confirm({
+      message: 'Tem certeza que deseja excluir?',
       accept: () => {
-        this.pessoaService.excluir(pessoa.codigo)
-        .then(() => {
-          this.pesquisar(this.filtro.pagina);
-          this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Pessoa excluida com sucesso!'});
-        })
-        .catch(erro => this.errorHandler.handle(erro));
+        this.excluir(pessoa);
       }
     });
+  }
+
+  excluir(pessoa: any) {
+    this.pessoaService.excluir(pessoa.codigo)
+      .then(() => {
+        if (this.grid.first === 0) {
+          this.pesquisar();
+        } else {
+          this.grid.first = 0;
+        }
+
+        this.toasty.success('Pesssoa excluída com sucesso!');
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   alternarStatus(pessoa: any): void {
     const novoStatus = !pessoa.ativo;
 
-    this.pessoaService.alternarStatus(pessoa.codigo, novoStatus)
+    this.pessoaService.mudarStatus(pessoa.codigo, novoStatus)
       .then(() => {
         const acao = novoStatus ? 'ativada' : 'desativada';
 
         pessoa.ativo = novoStatus;
-        this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Pessoa ' + acao + ' com sucesso!'});
+        this.toasty.success(`Pessoa ${acao} com sucesso!`);
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
+
 }

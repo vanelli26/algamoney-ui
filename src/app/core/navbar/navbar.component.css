@@ -4,7 +4,7 @@
 }
 
 .navbar-toggle {
-  color: aliceblue;
+  color: #fff;
 }
 
 .navbar-menu {
@@ -12,21 +12,24 @@
   top: 0;
   bottom: 0;
   right: 0;
-  width: 250px;
+  width: 210px;
   margin: 0;
-  padding: 10;
+  padding: 0;
   z-index: 9998;
+
+  background-color: #3a3633;
+
   list-style: none;
-  background-color: lightslategray;
 }
 
 .navbar-usuario {
   padding: 15px;
-  border-bottom: 1px solid wheat;
   margin-bottom: 15px;
-  color: aliceblue;
-  font-weight: bold;
+  border-bottom: 1px solid #525151;
+
   text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
 }
 
 .navbar-menuitem {
@@ -34,15 +37,14 @@
 }
 
 .navbar-menuitem a {
-  color: aliceblue;
+  color: #c0bbb7;
   text-decoration: none;
 }
 
 .navbar-menuitem a:hover {
-  color: floralwhite;
-  font-weight: bold;
+  color: #fff;
 }
 
 .navbar-menuitem.ativo {
-  background-color: darkgray;
+  background-color: #494541;
 }

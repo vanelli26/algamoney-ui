@@ -1,14 +1,15 @@
-import { LancamentoService } from './../lancamento.service';
-import { FormControl } from '@angular/forms';
-import { Lancamento } from './../lancamento';
-import { map } from 'rxjs/operators';
-import { PessoaService } from './../../pessoas/pessoa.service';
-import { Component, OnInit } from '@angular/core';
-import { CategoriaService } from 'src/app/categorias/categoria.service';
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
-import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { ToastyService } from 'ng2-toasty';
+
+import { ErrorHandlerService } from './../../core/error-handler.service';
+import { CategoriaService } from './../../categorias/categoria.service';
+import { PessoaService } from './../../pessoas/pessoa.service';
+import { Lancamento } from './../../core/model';
+import { LancamentoService } from './../lancamento.service';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -16,20 +17,21 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./lancamento-cadastro.component.css']
 })
 export class LancamentoCadastroComponent implements OnInit {
+
   tipos = [
-    {label: 'Receita', value: 'RECEITA'},
-    {label: 'Despesa', value: 'DESPESA'}
+    { label: 'Receita', value: 'RECEITA' },
+    { label: 'Despesa', value: 'DESPESA' },
   ];
-  titulo = 'Novo lançamento';
+
   categorias = [];
   pessoas = [];
   lancamento = new Lancamento();
 
   constructor(
-    private categoriasService: CategoriaService,
-    private pessoasService: PessoaService,
+    private categoriaService: CategoriaService,
+    private pessoaService: PessoaService,
     private lancamentoService: LancamentoService,
-    private messageService: MessageService,
+    private toasty: ToastyService,
     private errorHandler: ErrorHandlerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -37,47 +39,29 @@ export class LancamentoCadastroComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.title.setTitle('Cadastro Lançamento');
-    const codigoLancamento = this.route.snapshot.params.codigo;
+    const codigoLancamento = this.route.snapshot.params['codigo'];
+
+    this.title.setTitle('Novo lançamento');
+
     if (codigoLancamento) {
-      this.titulo = 'Editando lançamento';
-      this.title.setTitle('Editando Lançamento');
       this.carregarLancamento(codigoLancamento);
     }
+
     this.carregarCategorias();
-    this.carregaPessoas();
+    this.carregarPessoas();
   }
 
   get editando() {
-    return Boolean(this.lancamento.codigo);
+    return Boolean(this.lancamento.codigo)
   }
 
   carregarLancamento(codigo: number) {
-    this.lancamentoService.pesquisaCodigo(codigo)
+    this.lancamentoService.buscarPorCodigo(codigo)
       .then(lancamento => {
         this.lancamento = lancamento;
+        this.atualizarTituloEdicao();
       })
       .catch(erro => this.errorHandler.handle(erro));
-  }
-
-  carregarCategorias() {
-    return this.categoriasService.listarTodas()
-      .then(categorias => {
-        this.categorias = categorias.map(c => {
-          return {label: c.nome, value: c.codigo};
-        });
-      })
-      .catch(erro => this.errorHandler.handle(erro));
-  }
-
-  carregaPessoas() {
-    return this.pessoasService.listarTodas()
-    .then(pessoas => {
-      this.pessoas = pessoas.content.map(c => {
-        return {label: c.nome, value: c.codigo};
-      });
-    })
-    .catch(erro => this.errorHandler.handle(erro));
   }
 
   salvar(form: FormControl) {
@@ -90,25 +74,57 @@ export class LancamentoCadastroComponent implements OnInit {
 
   adicionarLancamento(form: FormControl) {
     this.lancamentoService.adicionar(this.lancamento)
-      .then(lancamento => {
-        this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento salvo com sucesso!'});
-        this.router.navigate(['/lancamentos/', lancamento.codigo]);
+      .then(lancamentoAdicionado => {
+        this.toasty.success('Lançamento adicionado com sucesso!');
+
+        // form.reset();
+        // this.lancamento = new Lancamento();
+        this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
       })
       .catch(erro => this.errorHandler.handle(erro));
   }
 
   atualizarLancamento(form: FormControl) {
     this.lancamentoService.atualizar(this.lancamento)
-    .then(lancamento => {
-      this.messageService.add({severity: 'success', summary: 'AlgaMoney', detail: 'Lançamento salvo com sucesso!'});
-      this.lancamento = lancamento;
-    })
-    .catch(erro => this.errorHandler.handle(erro));
+      .then(lancamento => {
+        this.lancamento = lancamento;
+
+        this.toasty.success('Lançamento alterado com sucesso!');
+        this.atualizarTituloEdicao();
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  carregarCategorias() {
+    return this.categoriaService.listarTodas()
+      .then(categorias => {
+        this.categorias = categorias
+          .map(c => ({ label: c.nome, value: c.codigo }));
+      })
+      .catch(erro => this.errorHandler.handle(erro));
+  }
+
+  carregarPessoas() {
+    this.pessoaService.listarTodas()
+      .then(pessoas => {
+        this.pessoas = pessoas
+          .map((p: { nome: any; codigo: any; }) => ({ label: p.nome, value: p.codigo }));
+      })
+      .catch(erro => this.errorHandler.handle(erro));
   }
 
   novo(form: FormControl) {
-    this.lancamento = new Lancamento();
-    form.reset(this.lancamento);
-    this.router.navigate(['/lancamentos/cadastro']);
+    form.reset();
+
+    setTimeout(function() {
+      this.lancamento = new Lancamento();
+    }.bind(this), 1);
+
+    this.router.navigate(['/lancamentos/novo']);
   }
+
+  atualizarTituloEdicao() {
+    this.title.setTitle(`Edição de lançamento: ${this.lancamento.descricao}`);
+  }
+
 }
