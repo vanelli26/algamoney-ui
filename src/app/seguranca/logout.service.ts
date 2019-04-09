@@ -1,26 +1,27 @@
+import { AuthHttp } from 'angular2-jwt';
 import { Injectable } from '@angular/core';
 
-import { AuthHttp } from 'angular2-jwt';
+import { environment } from './../../environments/environment';
 import { AuthService } from './auth.service';
-import { environment } from 'environments/environment';
 
 @Injectable()
 export class LogoutService {
 
-  tokenRevokeURL: string;
+  tokensRenokeUrl: string;
 
   constructor(
     private http: AuthHttp,
     private auth: AuthService
   ) {
-    this.tokenRevokeURL = environment.apiURL + '/tokens/revoke';
+    this.tokensRenokeUrl = `${environment.apiUrl}/tokens/revoke`;
   }
 
   logout() {
-    return this.http.delete(this.tokenRevokeURL, { withCredentials: true })
+    return this.http.delete(this.tokensRenokeUrl, { withCredentials: true })
       .toPromise()
       .then(() => {
         this.auth.limparAccessToken();
       });
   }
+
 }

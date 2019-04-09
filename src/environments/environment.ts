@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiURL: 'https://vanellimoney-api.herokuapp.com'
+  apiUrl: 'http://localhost:8080'
 };

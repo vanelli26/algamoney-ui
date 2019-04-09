@@ -108,7 +108,7 @@ export class LancamentoCadastroComponent implements OnInit {
     this.pessoaService.listarTodas()
       .then(pessoas => {
         this.pessoas = pessoas
-          .map((p: { nome: any; codigo: any; }) => ({ label: p.nome, value: p.codigo }));
+          .map(p => ({ label: p.nome, value: p.codigo }));
       })
       .catch(erro => this.errorHandler.handle(erro));
   }

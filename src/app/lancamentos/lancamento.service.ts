@@ -5,8 +5,8 @@ import { AuthHttp } from 'angular2-jwt';
 import * as moment from 'moment';
 import 'rxjs/add/operator/toPromise';
 
+import { environment } from './../../environments/environment';
 import { Lancamento } from './../core/model';
-import { environment } from 'environments/environment';
 
 export class LancamentoFiltro {
   descricao: string;
@@ -22,7 +22,7 @@ export class LancamentoService {
   lancamentosUrl: string;
 
   constructor(private http: AuthHttp) {
-    this.lancamentosUrl = environment.apiURL + '/lancamentos';
+    this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
   }
 
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
