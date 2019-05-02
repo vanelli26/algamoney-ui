@@ -18,6 +18,7 @@ import { CategoriaService } from './../categorias/categoria.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NaoAutorizadoComponent } from './nao-autorizado.component';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
+import { DashboardService } from './../dashboard/dashboard.service';
 
 registerLocaleData(localePt);
 
@@ -44,6 +45,7 @@ registerLocaleData(localePt);
     LancamentoService,
     PessoaService,
     CategoriaService,
+    DashboardService,
     ErrorHandlerService,
     AuthService,
 
