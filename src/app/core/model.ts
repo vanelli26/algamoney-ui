@@ -1,19 +1,21 @@
+export class Estado {
+  codigo: number;
+  nome: string;
+}
+
+export class Cidade {
+  codigo: number;
+  nome: string;
+  estado = new Estado();
+}
+
 export class Endereco {
   logradouro: string;
   numero: string;
   complemento: string;
   bairro: string;
   cep: string;
-  cidade: string;
-  estado: string;
-}
-
-export class Pessoa {
-  codigo: number;
-  nome: string;
-  endereco = new Endereco();
-  ativo = true;
-  contatos = new Array<Contato>();
+  cidade = new Cidade();
 }
 
 export class Contato {
@@ -31,6 +33,14 @@ export class Contato {
       this.email = email;
       this.telefone = telefone;
   }
+}
+
+export class Pessoa {
+  codigo: number;
+  nome: string;
+  endereco = new Endereco();
+  ativo = true;
+  contatos = new Array<Contato>();
 }
 
 export class Categoria {
