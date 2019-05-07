@@ -25,8 +25,8 @@ export class LancamentoCadastroComponent implements OnInit {
 
   categorias = [];
   pessoas = [];
-  // lancamento = new Lancamento();
   formulario: FormGroup;
+  uploadEmAndamento = false;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -71,7 +71,9 @@ export class LancamentoCadastroComponent implements OnInit {
         codigo: [ null, Validators.required ],
         nome: []
       }),
-      observacao: []
+      observacao: [],
+      anexo: [],
+      urlAnexo: []
     });
   }
 
@@ -112,8 +114,6 @@ export class LancamentoCadastroComponent implements OnInit {
       .then(lancamentoAdicionado => {
         this.toasty.success('Lançamento adicionado com sucesso!');
 
-        // form.reset();
-        // this.lancamento = new Lancamento();
         this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
       })
       .catch(erro => this.errorHandler.handle(erro));
@@ -122,7 +122,6 @@ export class LancamentoCadastroComponent implements OnInit {
   atualizarLancamento() {
     this.lancamentoService.atualizar(this.formulario.value)
       .then(lancamento => {
-        // this.lancamento = lancamento;
         this.formulario.patchValue(lancamento);
 
         this.toasty.success('Lançamento alterado com sucesso!');
@@ -161,5 +160,47 @@ export class LancamentoCadastroComponent implements OnInit {
 
   atualizarTituloEdicao() {
     this.title.setTitle(`Edição de lançamento: ${this.formulario.get('descricao').value}`);
+  }
+
+  get urlUploadAnexo() {
+    return this.lancamentoService.urlUploadAnexo();
+  }
+
+  antesUploadAnexo(event) {
+    event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    this.uploadEmAndamento = true;
+  }
+
+  aoTerminarUploadAnexo(event) {
+    const anexo = JSON.parse(event.xhr.response);
+
+    this.formulario.patchValue({
+      anexo: anexo.nome,
+      urlAnexo: anexo.url
+    });
+
+    this.uploadEmAndamento = false;
+  }
+
+  get nomeAnexo() {
+    const nome = this.formulario.get('anexo').value;
+
+    if (nome) {
+      return nome.substring(nome.indexOf('_') + 1, nome.length);
+    }
+
+    return '';
+  }
+
+  erroUpload(event) {
+    this.toasty.error('Erro ao tentar enviar anexo!');
+    this.uploadEmAndamento = false;
+  }
+
+  removerAnexo() {
+    this.formulario.patchValue({
+      anexo: null,
+      urlAnexo: null
+    });
   }
 }
