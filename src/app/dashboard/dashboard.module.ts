@@ -19,6 +19,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     DashboardRoutingModule
   ],
   declarations: [DashboardComponent],
-  providers: [DecimalPipe]
+  providers: [ DecimalPipe ]
 })
 export class DashboardModule { }

@@ -1,7 +1,7 @@
-import { DashboardService } from './../dashboard.service';
 import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
 import { DecimalPipe } from '@angular/common';
+
+import { DashboardService } from './../dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
 
   pieChartData: any;
   lineChartData: any;
+
   options = {
     tooltips: {
       callbacks: {
@@ -28,8 +29,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private decimalPipe: DecimalPipe
-  ) { }
+    private decimalPipe: DecimalPipe) { }
 
   ngOnInit() {
     this.configurarGraficoPizza();
@@ -44,7 +44,8 @@ export class DashboardComponent implements OnInit {
           datasets: [
             {
               data: dados.map(dado => dado.total),
-              backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6', '#DD4477', '#3366CC', '#DC3912']
+              backgroundColor: ['#FF9900', '#109618', '#990099', '#3B3EAC', '#0099C6',
+                                  '#DD4477', '#3366CC', '#DC3912']
             }
           ]
         };
@@ -97,7 +98,12 @@ export class DashboardComponent implements OnInit {
   }
 
   private configurarDiasMes() {
-    const quantidade = moment().daysInMonth();
+    const mesReferencia = new Date();
+    mesReferencia.setMonth(mesReferencia.getMonth() + 1);
+    mesReferencia.setDate(0);
+
+    const quantidade = mesReferencia.getDate();
+
     const dias: number[] = [];
 
     for (let i = 1; i <= quantidade; i++) {

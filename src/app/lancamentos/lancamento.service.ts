@@ -25,6 +25,10 @@ export class LancamentoService {
     this.lancamentosUrl = `${environment.apiUrl}/lancamentos`;
   }
 
+  urlUploadAnexo(): string {
+    return `${this.lancamentosUrl}/anexo`;
+  }
+
   pesquisar(filtro: LancamentoFiltro): Promise<any> {
     const params = new URLSearchParams();
 
@@ -109,10 +113,6 @@ export class LancamentoService {
           'YYYY-MM-DD').toDate();
       }
     }
-  }
-
-  urlUploadAnexo(): string {
-    return `${this.lancamentosUrl}/anexo`;
   }
 
 }

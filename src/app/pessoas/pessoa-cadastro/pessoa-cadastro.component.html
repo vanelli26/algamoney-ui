@@ -8,15 +8,24 @@
 
       <div class="ui-g-12 ui-fluid">
         <label>Nome</label>
-        <input pInputText type="text" name="nome" [(ngModel)]="pessoa.nome" #nome="ngModel" required minlength="5">
-        <app-message [control]="nome" error="required" text="Informe o nome"></app-message>
-        <app-message [control]="nome" error="minlength" text="Mínimo de {{ nome.errors?.minlength?.requiredLength }} caracteres"></app-message>
+        <input pInputText type="text" name="nome"
+          [(ngModel)]="pessoa.nome"
+          #nome="ngModel" required minlength="5">
+
+        <app-message [control]="nome" error="required"
+          text="Informe o nome"></app-message>
+        <app-message [control]="nome" error="minlength"
+          text="Mínimo de {{ nome.errors?.minlength?.requiredLength }} caracteres"></app-message>
       </div>
 
       <div class="ui-g-12 ui-md-9 ui-fluid">
         <label>Logradouro</label>
-        <input pInputText type="text" name="logradouro" [(ngModel)]="pessoa.endereco.logradouro" #logradouro="ngModel" required>
-        <app-message [control]="logradouro" error="required" text="Informe o logradouro"></app-message>
+        <input pInputText type="text" name="logradouro"
+          [(ngModel)]="pessoa.endereco.logradouro"
+          #logradouro="ngModel" required>
+
+        <app-message [control]="logradouro" error="required"
+          text="Informe o logradouro"></app-message>
       </div>
 
       <div class="ui-g-12 ui-md-3 ui-fluid">
@@ -69,16 +78,17 @@
       </div>
 
       <div class="ui-g-12 ui-md-6 ui-fluid">
-        <label>Cidade</label>
+          <label>Cidade</label>
 
-        <p-dropdown placeholder="Selecione..." [autoWidth]="false"
-          [filter]="true" [options]="cidades"
-          [(ngModel)]="pessoa.endereco.cidade.codigo" name="cidade"
-          #cidade="ngModel" required
-          [disabled]="!estadoSelecionado"></p-dropdown>
+          <p-dropdown placeholder="Selecione..." [autoWidth]="false"
+            [filter]="true" [options]="cidades"
+            [(ngModel)]="pessoa.endereco.cidade.codigo" name="cidade"
+            #cidade="ngModel" required
+            [disabled]="!estadoSelecionado"></p-dropdown>
 
-        <app-message [control]="cidade" error="required" text="Informe a cidade"></app-message>
-      </div>
+          <app-message [control]="cidade" error="required"
+            text="Informe a cidade"></app-message>
+        </div>
 
       <div class="ui-g-12">
         <p-panel header="Contatos">
@@ -88,9 +98,12 @@
 
       <div class="ui-g-12">
         <button pButton type="submit" label="Salvar" [disabled]="f.invalid"></button>
-        <button pButton type="button" label="Nova" class="ui-button-info"(click)="nova(f)"></button>
+        <button pButton type="button" label="Nova" class="ui-button-info"
+          (click)="nova(f)"></button>
+
         <a routerLink="/pessoas">Voltar para a pesquisa</a>
       </div>
     </div>
+
   </form>
 </div>

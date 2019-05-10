@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { ResponseContentType, URLSearchParams } from '@angular/http';
 
 import { AuthHttp } from 'angular2-jwt';
-import { environment } from './../../environments/environment';
 import * as moment from 'moment';
+
+import { environment } from './../../environments/environment';
 
 @Injectable()
 export class RelatoriosService {
@@ -21,8 +22,9 @@ export class RelatoriosService {
     params.set('fim', moment(fim).format('YYYY-MM-DD'));
 
     return this.http.get(`${this.lancamentosUrl}/relatorios/por-pessoa`,
-    { search: params, responseType: ResponseContentType.Blob })
-    .toPromise()
-    .then(response => response.blob());
+      { search: params, responseType: ResponseContentType.Blob })
+      .toPromise()
+      .then(response => response.blob());
   }
+
 }
