@@ -10,6 +10,7 @@ import { CategoriaService } from './../../categorias/categoria.service';
 import { PessoaService } from './../../pessoas/pessoa.service';
 import { Lancamento } from './../../core/model';
 import { LancamentoService } from './../lancamento.service';
+import { MoneyHttp } from 'app/seguranca/money-http';
 
 @Component({
   selector: 'app-lancamento-cadastro',
@@ -25,9 +26,8 @@ export class LancamentoCadastroComponent implements OnInit {
 
   categorias = [];
   pessoas = [];
-  // lancamento = new Lancamento();
   formulario: FormGroup;
-  uploadEmAndamento = false;
+  uploadEmAndamento: boolean;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -38,7 +38,8 @@ export class LancamentoCadastroComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private title: Title,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private http: MoneyHttp
   ) { }
 
   ngOnInit() {
@@ -56,27 +57,16 @@ export class LancamentoCadastroComponent implements OnInit {
     this.carregarPessoas();
   }
 
-  antesUploadAnexo(event) {
-    event.xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('token'));
-
+  uploadAnexo(data: { files: File }): void {
     this.uploadEmAndamento = true;
-  }
-
-  aoTerminarUploadAnexo(event) {
-    const anexo = JSON.parse(event.xhr.response);
-
-    this.formulario.patchValue({
-      anexo: anexo.nome,
-      urlAnexo: anexo.url
+    this.lancamentoService.uploadAnexo(data.files[0])
+    .then(r => {
+      this.formulario.patchValue({
+        anexo: r.nome,
+        urlAnexo: r.url
+      });
+      this.uploadEmAndamento = false;
     });
-
-    this.uploadEmAndamento = false;
-  }
-
-  erroUpload(event) {
-    this.messageService.add({ severity: 'error', detail: 'Erro ao tentar enviar anexo!' });
-
-    this.uploadEmAndamento = false;
   }
 
   removerAnexo() {
@@ -88,16 +78,10 @@ export class LancamentoCadastroComponent implements OnInit {
 
   get nomeAnexo() {
     const nome = this.formulario.get('anexo').value;
-
     if (nome) {
       return nome.substring(nome.indexOf('_') + 1, nome.length);
     }
-
     return '';
-  }
-
-  get urlUploadAnexo() {
-    return this.lancamentoService.urlUploadAnexo();
   }
 
   configurarFormulario() {
@@ -139,7 +123,6 @@ export class LancamentoCadastroComponent implements OnInit {
   carregarLancamento(codigo: number) {
     this.lancamentoService.buscarPorCodigo(codigo)
       .then(lancamento => {
-        // this.lancamento = lancamento;
         this.formulario.patchValue(lancamento);
         this.atualizarTituloEdicao();
       })
@@ -158,9 +141,6 @@ export class LancamentoCadastroComponent implements OnInit {
     this.lancamentoService.adicionar(this.formulario.value)
       .then(lancamentoAdicionado => {
         this.messageService.add({ severity: 'success', detail: 'Lançamento adicionado com sucesso!' });
-
-        // form.reset();
-        // this.lancamento = new Lancamento();
         this.router.navigate(['/lancamentos', lancamentoAdicionado.codigo]);
       })
       .catch(erro => this.errorHandler.handle(erro));
@@ -169,7 +149,6 @@ export class LancamentoCadastroComponent implements OnInit {
   atualizarLancamento() {
     this.lancamentoService.atualizar(this.formulario.value)
       .then(lancamento => {
-        // this.lancamento = lancamento;
         this.formulario.patchValue(lancamento);
 
         this.messageService.add({ severity: 'success', detail: 'Lançamento alterado com sucesso!' });

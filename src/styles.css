@@ -54,6 +54,7 @@ label {
 .col-acoes {
   width: 90px;
   text-align: center;
+  display: block
 }
 
 .col-acoes-header {
